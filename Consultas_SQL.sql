@@ -59,7 +59,9 @@ SELECT avg(cpf) from Funcionario;
 
 SELECT count(*) from Funcionario where cpf_gerente is NOT NULL;
 
-/*16: */ 
+/*16: Reunir todos os pacientes que estão registrados mas que ainda não foram atendidos */ 
+
+SELECT * FROM Paciente LEFT JOIN Atendimento on Paciente.CPF = Atendimento.paciente where Atendimento.descricao IS NULL;
 
 /*17: Todas as emergências ocorridas de janeiro de 2022 em diante: */ 
 
@@ -99,7 +101,7 @@ CREATE VIEW gerenciados as select cpf, cpf_gerente,nome,funcao from Funcionario 
 SELECT * from gerenciados;
 
 
-/*26: Dar privilégios de select e insert em atendimento para o usuário, depois remover a possibilidade do select FALTO ENTENDER O USUÁRIO */ 
+/*26: Dar privilégios de select e insert em atendimento para o usuário, depois remover a possibilidade do select FALTO ENTENDER O USUÁRIO, VAI DAR ERRO ASSIM*/ 
 GRANT SELECT, INSERT on Atendimento from User;
 
 REVOKE SELECT on Atendimento from User;
