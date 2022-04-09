@@ -6,8 +6,12 @@ ALTER TABLE Paciente MODIFY complemento varchar(120);
 
 
 /*2: Já foi feita no script de criação de tabelas*/
+CREATE INDEX idx_funcao
+ON Funcionario (funcao);
 
 /*3: Já foi feita no script de povoamento de tabelas*/
+
+INSERT INTO Paciente Values ('01239129222', 'Fernanda Souza de Lima','F', TO_DATE('1993-09-27','YYYY-MM-DD'), '22035330', 'casa amarela', '81999334222');
 
 /*4: Haverá uma troca na gerência, todos os funcionários gerenciados pelo funcionário cujo cpf é 01287138500 passarão a ser agenciados pelo gerente cujo cpf é 08846933232*/
 
@@ -51,9 +55,10 @@ SELECT max(data_e_hora) from Encaminha;
 
 SELECT * FROM Atendimento where data_e_hora in ( SELECT min(data_e_hora) from atendimento);
 
-/*14: NOSSO BANCO NÃO TEM VALORES NUMÉRICOS, REVER ESSA. */ 
+/*14: Pegar a média de atendimentos por enfermeiro */ 
 
-SELECT avg(cpf) from Funcionario;
+Select avg(quantidade_atendimento) from (Select CPF_FUNC, count(*) as quantidade_atendimento from Enfermeiro inner join 
+atendimento on Enfermeiro.CPF_func = Atendimento.enfermeiro group by Enfermeiro.CPF_func );
 
 /*15: Número de funcionarios que possuem algum gerente */ 
 
@@ -61,7 +66,7 @@ SELECT count(*) from Funcionario where cpf_gerente is NOT NULL;
 
 /*16: Reunir todos os pacientes que estão registrados mas que ainda não foram atendidos */ 
 
-SELECT * FROM Paciente LEFT JOIN Atendimento on Paciente.CPF = Atendimento.paciente where Atendimento.descricao IS NULL;
+SELECT * FROM Paciente LEFT JOIN Atendimento on Paciente.CPF = Atendimento.paciente where Atendimento.paciente IS NULL;
 
 /*17: Todas as emergências ocorridas de janeiro de 2022 em diante: */ 
 
@@ -102,6 +107,10 @@ SELECT * from gerenciados;
 
 
 /*26: Dar privilégios de select e insert em atendimento para o usuário, depois remover a possibilidade do select FALTO ENTENDER O USUÁRIO, VAI DAR ERRO ASSIM*/ 
-GRANT SELECT, INSERT on Atendimento from User;
 
-REVOKE SELECT on Atendimento from User;
+
+GRANT DELETE on Paciente to PUBLIC ;
+
+
+REVOKE DELETE ON Paciente FROM PUBLIC;
+
