@@ -19,6 +19,24 @@ BEGIN
          END LOOP;
 END;
 
+--3: USO DE BLOCO ANÔNIMO
+-- Utilizando um bloco anômino para mostrar todos os pacientes 
+
+DECLARE
+    iterator BINARY_INTEGER := 0;
+    patient_name Paciente.nome%TYPE;
+    CURSOR pointer IS SELECT nome FROM Paciente;
+BEGIN
+    OPEN pointer;
+        LOOP
+            FETCH pointer INTO patient_name;
+            DBMS_OUTPUT.Put_line(patient_name);
+            iterator := iterator + 1;
+            EXIT WHEN pointer%NOTFOUND;
+        END LOOP;
+END;
+
+
 -- 6: %TYPE
 -- Utilizando type para definir uma variável do tipo funcao e criando uma tabela com isso
 DECLARE
@@ -37,6 +55,19 @@ BEGIN
              i := i+1;
              EXIT WHEN funcoes_cursor%NOTFOUND;
          END LOOP;
+END;
+
+-- 7 : %ROWTYPE
+-- Utilizando rowtype para definir uma variável que armazena todos os valores da linha que está sendo lida 
+
+DECLARE
+    patient_infos Paciente%ROWTYPE;
+BEGIN
+    SELECT *
+    INTO patient_infos
+    FROM Paciente
+    WHERE cpf = 01287169500;
+    DBMS_OUTPUT.Put_line(patient_infos.nome || ' ' || patient_infos.sexo || ' ' || patient_infos.telefone);
 END;
 
 -- 10 LOOP EXIT WHEN
@@ -58,6 +89,28 @@ BEGIN
              EXIT WHEN diagnosticos_cursor%NOTFOUND;
          END LOOP;
 END;
+
+-- 15: WHILE LOOP
+-- Utilizando While Loop para percorrer todos os pacientes da tabela de pacientes e printar seus nomes
+
+DECLARE 
+    iterator BINARY_INTEGER := 0;
+    patient_count BINARY_INTEGER := 0;
+    patient_name Paciente.nome%TYPE;
+    CURSOR pointer IS SELECT nome FROM Paciente;
+BEGIN
+    OPEN pointer;
+        SELECT
+        COUNT(*)
+        INTO patient_count
+        FROM Paciente;
+        WHILE iterator < patient_count LOOP
+            FETCH pointer INTO patient_name;
+            DBMS_OUTPUT.Put_line(patient_name);
+            iterator := iterator + 1;
+        END LOOP;
+END;
+
 
 -- 14 CURSOR (OPEN, FETCH e CLOSE)
 -- Criando uma nova tabela de especialização dos hospitais, pegando as informações com o cursor
@@ -82,6 +135,22 @@ BEGIN
 
 END;
 
+-- 16: EXCEPTION WHEN
+-- Utilizando exception when para tratar o erro de não encontrar um paciente na tabela de pacientes
+
+DECLARE
+    patient_info Paciente%ROWTYPE;
+BEGIN
+    SELECT *
+    INTO patient_info
+    FROM Paciente
+    WHERE cpf = 1;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.Put_line('Não encontrado');
+END;
+
+
 --18 CREATE OR REPLACE PACKAGE BODY
 -- Criando um package que contem o procedimento de criar paciente, e então fazendo o seu respectivo body
 
@@ -99,3 +168,14 @@ CREATE OR REPLACE PACKAGE BODY paciente_package AS
     END criar_paciente;
 END paciente_package;
 /
+
+-- 19: CREATE OR REPLACE TRIGGER (COMANDO)
+-- Criando um trigger para criar um médico quando um funcionário com o cargo de médico for criado
+
+CREATE OR REPLACE TRIGGER medico_trigger AFTER INSERT ON Funcionario FOR EACH ROW WHEN(NEW.funcao = 'medico')
+BEGIN
+    INSERT INTO Medico VALUES ('01327455340', '78951234-0/BR');
+    DBMS_OUTPUT.PUT_LINE('Médico criado');
+END;
+/
+INSERT INTO Funcionario Values ('01327455340',  '08846933232',  'José Ayrton', 'medico', TO_DATE('1973-04-28','YYYY-MM-DD'), '81999553414');
