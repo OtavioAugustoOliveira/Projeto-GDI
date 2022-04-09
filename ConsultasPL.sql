@@ -36,6 +36,25 @@ BEGIN
         END LOOP;
 END;
 
+/*4 e 16 : Criar procedimento que recebe como parametros dados do paciente, e o insere na tabela de Paciente*/ 
+
+CREATE OR REPLACE PROCEDURE InserePaciente(
+  p_CPF Paciente.CPF%TYPE,
+  p_nome Paciente.nome%TYPE,
+  p_sexo Paciente.sexo%TYPE,
+  p_data_de_nascimento Paciente.data_de_nascimento%TYPE,
+  p_cep Paciente.cep%TYPE,
+  p_complemento Paciente.complemento%TYPE,
+  p_telefone Paciente.telefone%TYPE) 
+  IS
+  BEGIN
+    INSERT INTO Paciente (CPF, nome, sexo, data_de_nascimento, cep, complemento, telefone) 
+    VALUES (p_CPF, p_nome, p_sexo, p_data_de_nascimento, p_cep, p_complemento, p_telefone);
+
+    COMMIT;
+  END InserePaciente;
+  /
+
 
 -- 6: %TYPE
 -- Utilizando type para definir uma variável do tipo funcao e criando uma tabela com isso
@@ -69,6 +88,21 @@ BEGIN
     WHERE cpf = 01287169500;
     DBMS_OUTPUT.Put_line(patient_infos.nome || ' ' || patient_infos.sexo || ' ' || patient_infos.telefone);
 END;
+
+
+/*8 e 12 - FOR IN LOOP e IF ELSIF : Quais funcionários são profissionais de saúde*/ 
+BEGIN
+    DBMS_OUTPUT.Put_line('Profissionais de saúde cadastrados:');
+    FOR funcionario IN (SELECT * FROM Funcionario) LOOP
+        IF funcionario.funcao = 'medico' THEN
+            DBMS_OUTPUT.Put_line('Médico: ' || funcionario.nome);
+        ELSIF funcionario.funcao = 'enfermeiro' THEN
+            DBMS_OUTPUT.Put_line('Enfermeiro: ' || funcionario.nome);
+        END IF;
+    END LOOP;
+END;
+
+
 
 -- 10 LOOP EXIT WHEN
 -- Utilizando Exit When para encerrar o loop quando o cursor de diagnósticos tiver percorrido por todos os diagnosticos da tabela de examina
@@ -179,3 +213,17 @@ BEGIN
 END;
 /
 INSERT INTO Funcionario Values ('01327455340',  '08846933232',  'José Ayrton', 'medico', TO_DATE('1973-04-28','YYYY-MM-DD'), '81999553414');
+
+
+
+/*20 - Trigger por linha, levantar erro caso descrição e anamnese sejam iguais em um atendimento */ 
+
+CREATE OR REPLACE TRIGGER contato_emerg_igual BEFORE INSERT ON Atendimento FOR EACH ROW
+    BEGIN
+    IF :NEW.descricao = :NEW.anamnese THEN
+        RAISE_APPLICATION_ERROR(-20000, 'Descrição do atendimento e anamnese não podem ser iguais');
+    END IF;
+END;
+/
+
+-- INSERT INTO Atendimento Values ('01287169500', '33819155083', TO_TIMESTAMP('2022/03/31 08:14:03','YYYY/MM/DD HH24:MI:SS,'), 'Paciente com febre, pressão 12x8', 'Paciente com febre, pressão 12x8');
