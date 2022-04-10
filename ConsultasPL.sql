@@ -18,7 +18,7 @@ BEGIN
              EXIT WHEN nomes_cursor%NOTFOUND;
          END LOOP;
 END;
-
+/
 --3: USO DE BLOCO ANÔNIMO
 -- Utilizando um bloco anômino para mostrar todos os pacientes 
 
@@ -35,7 +35,7 @@ BEGIN
             EXIT WHEN pointer%NOTFOUND;
         END LOOP;
 END;
-
+/
 /*4 e 16 : Criar procedimento que recebe como parametros dados do paciente, e o insere na tabela de Paciente*/ 
 
 CREATE OR REPLACE PROCEDURE InserePaciente(
@@ -53,29 +53,8 @@ CREATE OR REPLACE PROCEDURE InserePaciente(
 
     COMMIT;
   END InserePaciente;
-  /
 
-
--- 6: %TYPE
--- Utilizando type para definir uma variável do tipo funcao e criando uma tabela com isso
-DECLARE
-    i BINARY_INTEGER := 0;
-    funcao_var Funcionario.funcao%TYPE;
-    TYPE TabelaFuncoes IS TABLE OF Funcionario.funcao%TYPE INDEX BY BINARY_INTEGER;
-    new_table TabelaFuncoes;
-    CURSOR funcoes_cursor IS SELECT funcao FROM Funcionario;
-BEGIN
-     OPEN funcoes_cursor;
-     
-         LOOP
-             FETCH funcoes_cursor INTO funcao_var;
-             new_table(i) := funcao_var;
-             DBMS_OUTPUT.Put_line(new_table(i));
-             i := i+1;
-             EXIT WHEN funcoes_cursor%NOTFOUND;
-         END LOOP;
-END;
-
+/
 -- 7 : %ROWTYPE
 -- Utilizando rowtype para definir uma variável que armazena todos os valores da linha que está sendo lida 
 
@@ -88,7 +67,7 @@ BEGIN
     WHERE cpf = 01287169500;
     DBMS_OUTPUT.Put_line(patient_infos.nome || ' ' || patient_infos.sexo || ' ' || patient_infos.telefone);
 END;
-
+/
 
 /*8 e 12 - FOR IN LOOP e IF ELSIF : Quais funcionários são profissionais de saúde*/ 
 BEGIN
@@ -101,7 +80,7 @@ BEGIN
         END IF;
     END LOOP;
 END;
-
+/
 
 
 -- 10 LOOP EXIT WHEN
@@ -123,7 +102,7 @@ BEGIN
              EXIT WHEN diagnosticos_cursor%NOTFOUND;
          END LOOP;
 END;
-
+/
 -- 15: WHILE LOOP
 -- Utilizando While Loop para percorrer todos os pacientes da tabela de pacientes e printar seus nomes
 
@@ -144,7 +123,7 @@ BEGIN
             iterator := iterator + 1;
         END LOOP;
 END;
-
+/
 
 -- 14 CURSOR (OPEN, FETCH e CLOSE)
 -- Criando uma nova tabela de especialização dos hospitais, pegando as informações com o cursor
@@ -168,7 +147,7 @@ BEGIN
      CLOSE especs_cursor;
 
 END;
-
+/
 -- 16: EXCEPTION WHEN
 -- Utilizando exception when para tratar o erro de não encontrar um paciente na tabela de pacientes
 
@@ -183,7 +162,7 @@ EXCEPTION
     WHEN NO_DATA_FOUND THEN
         DBMS_OUTPUT.Put_line('Não encontrado');
 END;
-
+/
 
 --18 CREATE OR REPLACE PACKAGE BODY
 -- Criando um package que contem o procedimento de criar paciente, e então fazendo o seu respectivo body
@@ -225,5 +204,179 @@ CREATE OR REPLACE TRIGGER contato_emerg_igual BEFORE INSERT ON Atendimento FOR E
     END IF;
 END;
 /
+
+
+/*1: RECORD: criamos um tipo que armazena só cpf e nome dos funcionários*/
+
+DECLARE
+    TYPE cpf_nome_func IS RECORD(
+        cpf CHAR(11), 
+        nome VARCHAR2(255)); 
+        novo_func cpf_nome_func;
+BEGIN
+    novo_func.cpf := '99933200155';
+    novo_func.nome := 'Marcos Pereira Silva';
+END;
+
+/
+
+/*5: Function: Função que retorna a data de nascimento se o  funcionario nasceu depois de 1990: */
+
+CREATE OR REPLACE FUNCTION return_data_nascimento(CPF_func Funcionario.CPF%TYPE)
+
+RETURN date
+
+IS
+    nascimento_func Funcionario.data_de_nascimento%TYPE;
+    output  Funcionario.CPF%TYPE;
+
+BEGIN
+
+SELECT data_de_nascimento INTO nascimento_func from Funcionario where Funcionario.CPF = CPF_func and data_de_nascimento >= TO_DATE('1990-01-01','YYYY-MM-DD');
+
+output := nascimento_func;
+
+RETURN output;
+
+END return_data_nascimento;
+
+
+/
+
+
+
+/*9: CASE WHEN: Irá retornar
+'1' caso o cpf do paciente comece com 1 ou 2, 
+'2' caso o cpf do paciente comece com 3 ou 4, 
+'3' caso o cpf do paciente comece com 5 ou 6
+'4' caso o cpf do paciente comece com 7 ou 8
+'5' caso o cpf do paciente comece com 9 ou 0
+*/
+
+DECLARE
+
+variavel_cpf VARCHAR(12) := '01287169500';
+primeira_letra_variavel VARCHAR(1);
+parametrizacao_cpf VARCHAR(1);
+
+BEGIN
+
+SELECT SUBSTR(variavel_cpf,1,1) AS primeira_letra into primeira_letra_variavel FROM Paciente WHERE Paciente.CPF = variavel_cpf;
+
+CASE primeira_letra_variavel
+
+WHEN '1'  THEN parametrizacao_cpf := '1';
+WHEN '2'  THEN parametrizacao_cpf := '1';
+WHEN '3'  THEN parametrizacao_cpf := '2';
+WHEN '4'  THEN parametrizacao_cpf := '2';
+WHEN '5'  THEN parametrizacao_cpf := '3';
+WHEN '6'  THEN parametrizacao_cpf := '3';
+WHEN '7'  THEN parametrizacao_cpf := '4';
+WHEN '8'  THEN parametrizacao_cpf := '4';
+WHEN '9'  THEN parametrizacao_cpf := '5';
+WHEN '0'  THEN parametrizacao_cpf := '5';
+
+
+END CASE;
+
+DBMS_OUTPUT.PUT_LINE(parametrizacao_cpf);
+
+END;
+/
+
+/*13. SELECT INTO: Retorna algum comentário a depender do hospital escolhido para atendimento*/
+DECLARE
+    codigo_hospital varchar(1) := '2';
+    nome_hospital VARCHAR(80);
+    comentario VARCHAR(50);
+BEGIN
+    SELECT nome into nome_hospital from Hospital where Hospital.codigo_identificador_hospital = codigo_hospital;
+
+   CASE codigo_hospital
+
+WHEN '1' THEN comentario := 'Muito bem cuidado';
+WHEN '2' THEN comentario := 'Funcionários mal educados';
+WHEN '3' THEN comentario := 'Péssimo atendimento';
+WHEN '4' THEN comentario := 'Bem completo, ótimos equipamentos';
+WHEN '5' THEN comentario := 'Faltam equipamentos';
+
+END CASE;
+DBMS_OUTPUT.PUT_LINE(comentario);
+END;
+
+/
+
+/*17. CREATE OR REPLACE PACKAGE: CRIA UM PACKAGE PARA INSERIR VALORES DE ATENDIMENTO E PACIENTE*/
+
+CREATE OR REPLACE PACKAGE inserção AS 
+
+PROCEDURE inserir_atendimento(novo_valor_atendimento Atendimento%ROWTYPE);
+PROCEDURE inserir_paciente(novo_valor_paciente Paciente%ROWTYPE);
+
+END inserção; 
+/
+
+CREATE OR REPLACE PACKAGE BODY inserção AS
+
+PROCEDURE inserir_atendimento(novo_valor_atendimento Atendimento%ROWTYPE) IS
+BEGIN
+INSERT INTO Atendimento(paciente, enfermeiro, data_e_hora, descricao, anamnese) VALUES 
+(novo_valor_atendimento.paciente, novo_valor_atendimento.enfermeiro, novo_valor_atendimento.data_e_hora, 
+novo_valor_atendimento.descricao, novo_valor_atendimento.anamnese);
+
+END inserir_atendimento;
+
+PROCEDURE inserir_paciente(novo_valor_paciente Paciente%ROWTYPE) IS
+BEGIN
+INSERT INTO Paciente(CPF, nome, sexo, data_de_nascimento, cep,complemento,telefone) VALUES
+(novo_valor_paciente.CPF,novo_valor_paciente.nome,novo_valor_paciente.sexo,novo_valor_paciente.data_de_nascimento,novo_valor_paciente.cep,novo_valor_paciente.complemento,novo_valor_paciente.telefone);
+
+END inserir_paciente;
+
+END inserção;
+/
+
+/* 6: %TYPE
+-- Utilizando type para definir uma variável do tipo funcao e criando uma tabela com isso */
+DECLARE
+    i BINARY_INTEGER := 0;
+    funcao_var Funcionario.funcao%TYPE;
+    TYPE TabelaFuncoes IS TABLE OF Funcionario.funcao%TYPE INDEX BY BINARY_INTEGER;
+    new_table TabelaFuncoes;
+    CURSOR funcoes_cursor IS SELECT funcao FROM Funcionario;
+BEGIN
+     OPEN funcoes_cursor;
+     
+         LOOP
+             FETCH funcoes_cursor INTO funcao_var;
+             new_table(i) := funcao_var;
+             DBMS_OUTPUT.Put_line(new_table(i));
+             i := i+1;
+             EXIT WHEN funcoes_cursor%NOTFOUND;
+         END LOOP;
+END;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 -- INSERT INTO Atendimento Values ('01287169500', '33819155083', TO_TIMESTAMP('2022/03/31 08:14:03','YYYY/MM/DD HH24:MI:SS,'), 'Paciente com febre, pressão 12x8', 'Paciente com febre, pressão 12x8');
