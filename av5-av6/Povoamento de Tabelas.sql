@@ -1,0 +1,1 @@
+INSERT INTO Paciente Values ('01287169500', 'José da Silva','M', TO_DATE('1999-01-01','YYYY-MM-DD'), '28045910', 'casa', '81999724512');

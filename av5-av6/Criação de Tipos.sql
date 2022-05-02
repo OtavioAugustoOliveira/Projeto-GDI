@@ -1,3 +1,36 @@
+/* 
+1. CREATE OR REPLACE TYPE - ✅
+2. CREATE OR REPLACE TYPE BODY - ✅
+3. MEMBER PROCEDURE - ✅
+4. MEMBER FUNCTION - ✅
+5. ORDER MEMBER FUNCTION
+6. MAP MEMBER FUNCTION - ✅
+7. CONSTRUCTOR FUNCTION
+8. OVERRIDING MEMBER
+9. FINAL MEMBER - ✅
+10. NOT INSTANTIABLE TYPE/MEMBER - preciso adaptar para que a gente não possa criar um objeto do tipo, 
+somente filhos. Ex: funcionario receber apenas enfermeiro e médico.
+11. HERANÇA DE TIPOS (UNDER/NOT FINAL) - ✅
+12. ALTER TYPE - ✅
+13. CREATE TABLE OF - ✅
+14. WITH ROWID REFERENCES
+15. REF
+16. SCOPE IS
+17. INSERT INTO -✅
+18. VALUE
+19. VARRAY
+20. NESTED TABLE
+
+
+
+
+ */
+
+
+
+
+
+
 CREATE OR REPLACE TYPE tp_Paciente AS OBJECT ( 
     CPF varchar(24), 
     nome varchar(256), 
@@ -6,22 +39,25 @@ CREATE OR REPLACE TYPE tp_Paciente AS OBJECT (
     cep varchar(24), 
     complemento varchar(32) NULL, 
     telefone varchar(15),
-    MAP MEMBER FUNCTION retorna_paciente RETURN varchar
+    MAP MEMBER FUNCTION retorna_paciente RETURN varchar2
 
 );
 /
 
-'''CREATE OR REPLACE TYPE BODY tp_Paciente AS MAP MEMBER FUNCTION retorna_paciente RETURN varchar
+CREATE OR REPLACE TYPE BODY tp_Paciente AS 
+MAP MEMBER FUNCTION retorna_paciente RETURN varchar2
     IS
     BEGIN
-     RETURN (CPF: '  || SELF.CPF ||',
-            nome: '|| SELF.NOME ||',
-            sexo:  '|| SELF.sexo ||');
+     RETURN ('CPF:'   || CPF ||
+            ', nome:' || nome ||
+            ', sexo:'  || sexo);
 
         END;
+    
+    
     END;
 
-/'''
+/
 
 
 CREATE OR REPLACE TYPE tp_Funcionario AS OBJECT ( 
@@ -29,11 +65,35 @@ CREATE OR REPLACE TYPE tp_Funcionario AS OBJECT (
     cpf_gerente varchar(24), 
     nome varchar(256), 
     funcao varchar(30), 
-    data_de_nascimento date, 
-    telefone varchar(15)     
+    data_de_nascimento date,
+    
+    MEMBER PROCEDURE descrever_funcionario
  
 ) NOT FINAL;
 /
+
+CREATE OR REPLACE TYPE BODY tp_Funcionario AS
+MEMBER PROCEDURE descrever_funcionario IS
+
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Descrevendo Funcionario:');
+    DBMS_OUTPUT.PUT_LINE('CPF:' || CPF);
+    DBMS_OUTPUT.PUT_LINE('CPF do Gerente:' || cpf_gerente);
+    DBMS_OUTPUT.PUT_LINE('Nome:' || nome);
+    DBMS_OUTPUT.PUT_LINE('funcao:' || funcao);
+
+    END;
+END;
+
+/
+
+
+ALTER TYPE tp_Funcionario
+    ADD ATTRIBUTE (telefone varchar(15))
+    CASCADE;
+
+/
+
 
 CREATE OR REPLACE TYPE tp_Medico UNDER tp_Funcionario  ( 
     CPF_med varchar(24), 
@@ -56,9 +116,18 @@ CREATE OR REPLACE TYPE tp_Hospital AS OBJECT  (
     complemento varchar(20), 
     numero varchar(15), 
     especializacao varchar(15), 
-    telefone varchar(15)
-    MEMBER FUNCTION retorna_nome_hospital RETURN varchar
+    telefone varchar(15),
+    FINAL MEMBER FUNCTION retorna_nome_hospital RETURN varchar
 );
+/
+
+CREATE OR REPLACE TYPE BODY tp_Hospital AS 
+
+FINAL MEMBER FUNCTION retorna_nome_hospital RETURN varchar IS
+    BEGIN
+        RETURN nome;
+    END;
+END;
 /
 
 CREATE OR REPLACE TYPE tp_Atendimento AS OBJECT ( 

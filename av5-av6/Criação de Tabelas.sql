@@ -36,17 +36,6 @@ CREATE TABLE tb_Enfermeiro OF tp_Enfermeiro (
 /
 
 
-CREATE OR REPLACE TYPE tp_Hospital AS MEMBER FUNCTION retorna_nome_hospital RETURN varchar
-
-    IS
-    BEGIN
-        RETURN self.nome;
-    END;
-END;
-
-/
-
-
 CREATE TABLE tb_Hospital OF tp_Hospital(
     complemento NULL,
     CONSTRAINT PK_Hospital PRIMARY KEY (codigo_identificador_hospital) 
