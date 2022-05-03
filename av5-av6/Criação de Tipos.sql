@@ -3,10 +3,10 @@
 2. CREATE OR REPLACE TYPE BODY - ✅
 3. MEMBER PROCEDURE - ✅
 4. MEMBER FUNCTION - ✅
-5. ORDER MEMBER FUNCTION
+5. ORDER MEMBER FUNCTION - ✅
 6. MAP MEMBER FUNCTION - ✅
-7. CONSTRUCTOR FUNCTION
-8. OVERRIDING MEMBER
+7. CONSTRUCTOR FUNCTION - ✅
+8. OVERRIDING MEMBER - ✅
 9. FINAL MEMBER - ✅
 10. NOT INSTANTIABLE TYPE/MEMBER - preciso adaptar para que a gente não possa criar um objeto do tipo, 
 somente filhos. Ex: funcionario receber apenas enfermeiro e médico.
@@ -80,7 +80,6 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('CPF:' || CPF);
     DBMS_OUTPUT.PUT_LINE('CPF do Gerente:' || cpf_gerente);
     DBMS_OUTPUT.PUT_LINE('Nome:' || nome);
-    DBMS_OUTPUT.PUT_LINE('funcao:' || funcao);
 
     END;
 END;
@@ -97,9 +96,26 @@ ALTER TYPE tp_Funcionario
 
 CREATE OR REPLACE TYPE tp_Medico UNDER tp_Funcionario  ( 
     CPF_med varchar(24), 
-    CRM varchar(24)
+    CRM varchar(24),
+    OVERRIDING MEMBER PROCEDURE descrever_funcionario
    
 );
+/
+
+CREATE OR REPLACE TYPE BODY tp_Medico AS
+OVERRIDING MEMBER PROCEDURE descrever_funcionario IS
+
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Descrevendo Funcionario:');
+    DBMS_OUTPUT.PUT_LINE('CPF:' || CPF);
+    DBMS_OUTPUT.PUT_LINE('CPF do Gerente:' || cpf_gerente);
+    DBMS_OUTPUT.PUT_LINE('Nome:' || nome);
+    DBMS_OUTPUT.PUT_LINE('funcao:' || funcao);
+
+
+    END;
+END;
+
 /
 
 
@@ -147,20 +163,52 @@ CREATE OR REPLACE TYPE tp_Emergencia AS OBJECT (
     situacao_inicial varchar(256), 
     numero_da_sala varchar(10), 
     resultado varchar(256), 
-    data_e_hora TIMESTAMP(0)
+    data_e_hora TIMESTAMP(0),
+    ORDER MEMBER FUNCTION func_compara_data_e_hora (objeto tp_Emergencia) RETURN NUMBER
     
 );
+/
+
+CREATE OR REPLACE TYPE BODY tp_Emergencia AS 
+    ORDER MEMBER FUNCTION func_compara_data_e_hora (objeto tp_Emergencia) RETURN NUMBER IS
+    BEGIN
+        IF SELF.data_e_hora < objeto.data_e_hora THEN
+            RETURN -1;
+        
+        ELSIF SELF.data_e_hora > objeto.data_e_hora THEN
+            RETURN 1;
+
+        ELSE
+            RETURN 0;
+        END IF;
+
+    END;
+END;
+
 /
 
 
 CREATE OR REPLACE TYPE tp_Contato_de_Emergencia AS OBJECT  ( 
     CPF_PAC varchar(24), 
     nome varchar(256), 
-    telefone varchar(15)
-   
- 
+    telefone varchar(15),
+   CONSTRUCTOR FUNCTION tp_Contato_de_Emergencia (objeto tp_Contato_de_Emergencia) RETURN SELF AS RESULT 
 );
 /
+
+
+CREATE OR REPLACE TYPE BODY tp_Contato_de_Emergencia AS 
+CONSTRUCTOR FUNCTION tp_Contato_de_Emergencia (objeto tp_Contato_de_Emergencia) RETURN SELF AS RESULT IS
+BEGIN
+    CPF_PAC := objeto.CPF_PAC;
+    nome := objeto.nome;
+    telefone := objeto.telefone;
+
+    RETURN;
+    END;
+END;
+/
+
 
 CREATE OR REPLACE TYPE tp_Examina AS OBJECT ( 
     medico varchar(256), 
