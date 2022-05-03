@@ -13,12 +13,12 @@ somente filhos. Ex: funcionario receber apenas enfermeiro e médico.
 11. HERANÇA DE TIPOS (UNDER/NOT FINAL) - ✅
 12. ALTER TYPE - ✅
 13. CREATE TABLE OF - ✅
-14. WITH ROWID REFERENCES
-15. REF
-16. SCOPE IS
+14. WITH ROWID REFERENCES - ✅
+15. REF - ✅
+16. SCOPE IS - ✅
 17. INSERT INTO -✅
-18. VALUE
-19. VARRAY
+18. VALUE - NÃO ACHEI ESSA, PROCUREI EM VÁRIOS LUGARES
+19. VARRAY - Fácil de fazer
 20. NESTED TABLE
 
 
@@ -27,17 +27,20 @@ somente filhos. Ex: funcionario receber apenas enfermeiro e médico.
  */
 
 
+CREATE OR REPLACE TYPE tp_endereco FORCE AS OBJECT (
+    cep varchar(24),
+    complemento varchar(32)
 
+);
 
-
+/
 
 CREATE OR REPLACE TYPE tp_Paciente AS OBJECT ( 
     CPF varchar(24), 
     nome varchar(256), 
     sexo varchar(12), 
-    data_de_nascimento date , 
-    cep varchar(24), 
-    complemento varchar(32) NULL, 
+    data_de_nascimento date ,  
+    endereco REF tp_endereco,
     telefone varchar(15),
     MAP MEMBER FUNCTION retorna_paciente RETURN varchar2
 
@@ -128,8 +131,7 @@ CREATE OR REPLACE TYPE tp_Enfermeiro UNDER tp_Funcionario  (
 CREATE OR REPLACE TYPE tp_Hospital AS OBJECT  ( 
     codigo_identificador_hospital varchar(240), 
     nome varchar(256), 
-    cep varchar(15), 
-    complemento varchar(20), 
+    endereco REF tp_endereco,
     numero varchar(15), 
     especializacao varchar(15), 
     telefone varchar(15),
