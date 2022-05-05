@@ -1,25 +1,25 @@
 /* 
-1. CREATE OR REPLACE TYPE - ✅
-2. CREATE OR REPLACE TYPE BODY - ✅
-3. MEMBER PROCEDURE - ✅
-4. MEMBER FUNCTION - ✅
-5. ORDER MEMBER FUNCTION - ✅
-6. MAP MEMBER FUNCTION - ✅
-7. CONSTRUCTOR FUNCTION - ✅
-8. OVERRIDING MEMBER - ✅
-9. FINAL MEMBER - ✅
-10. NOT INSTANTIABLE TYPE/MEMBER - preciso adaptar para que a gente não possa criar um objeto do tipo, 
-somente filhos. Ex: funcionario receber apenas enfermeiro e médico.
-11. HERANÇA DE TIPOS (UNDER/NOT FINAL) - ✅
-12. ALTER TYPE - ✅
-13. CREATE TABLE OF - ✅
-14. WITH ROWID REFERENCES - ✅
-15. REF - ✅
-16. SCOPE IS - ✅
-17. INSERT INTO -✅
-18. VALUE - NÃO ACHEI ESSA, PROCUREI EM VÁRIOS LUGARES
-19. VARRAY - Fácil de fazer
-20. NESTED TABLE
+-1. CREATE OR REPLACE TYPE - ✅
+-2. CREATE OR REPLACE TYPE BODY - ✅
+-3. MEMBER PROCEDURE - ✅
+-4. MEMBER FUNCTION - ✅
+-5. ORDER MEMBER FUNCTION - ✅
+-6. MAP MEMBER FUNCTION - ✅
+-7. CONSTRUCTOR FUNCTION - ✅
+-8. OVERRIDING MEMBER - ✅
+-9. FINAL MEMBER - ✅
+-10. NOT INSTANTIABLE TYPE/MEMBER - ✅ 
+precisei adaptar e criar tabelas próprias para endereço, para que só os filhos possam ser acessados
+-11. HERANÇA DE TIPOS (UNDER/NOT FINAL) - ✅
+-12. ALTER TYPE - ✅
+-13. CREATE TABLE OF - ✅
+-14. WITH ROWID REFERENCES - ✅
+-15. REF - ✅
+-16. SCOPE IS - 
+-17. INSERT INTO -✅
+-18. VALUE - 
+-19. VARRAY - ✅ Telefone virou multivalorado, array com no máximo 3 valores.
+-20. NESTED TABLE
 
 
 
@@ -27,21 +27,38 @@ somente filhos. Ex: funcionario receber apenas enfermeiro e médico.
  */
 
 
-CREATE OR REPLACE TYPE tp_endereco FORCE AS OBJECT (
+CREATE OR REPLACE TYPE tp_endereco AS OBJECT (
     cep varchar(24),
     complemento varchar(32)
 
-);
-
+) NOT FINAL NOT INSTANTIABLE;
 /
+
+CREATE OR REPLACE TYPE tp_endereco_Paciente UNDER tp_endereco (
+
+
+);
+/
+
+CREATE OR REPLACE TYPE tp_telefone AS OBJECT (
+    numero varchar(24)
+
+);
+/
+
+CREATE OR REPLACE TYPE VARRAY_tp_telefone AS VARRAY(3) OF tp_telefone;
+/
+
+
+
 
 CREATE OR REPLACE TYPE tp_Paciente AS OBJECT ( 
     CPF varchar(24), 
     nome varchar(256), 
     sexo varchar(12), 
     data_de_nascimento date ,  
-    endereco REF tp_endereco,
-    telefone varchar(15),
+    endereco REF tp_endereco_Paciente,
+    telefone REF VARRAY_tp_telefone,
     MAP MEMBER FUNCTION retorna_paciente RETURN varchar2
 
 );
@@ -91,10 +108,11 @@ END;
 
 
 ALTER TYPE tp_Funcionario
-    ADD ATTRIBUTE (telefone varchar(15))
+    ADD ATTRIBUTE (telefone REF VARRAY_tp_telefone)
     CASCADE;
 
 /
+
 
 
 CREATE OR REPLACE TYPE tp_Medico UNDER tp_Funcionario  ( 
@@ -128,13 +146,19 @@ CREATE OR REPLACE TYPE tp_Enfermeiro UNDER tp_Funcionario  (
 );
 /
 
+
+CREATE OR REPLACE TYPE tp_endereco_Hospital UNDER tp_endereco (
+    numero varchar(15)
+);
+/
+
+
 CREATE OR REPLACE TYPE tp_Hospital AS OBJECT  ( 
     codigo_identificador_hospital varchar(240), 
     nome varchar(256), 
-    endereco REF tp_endereco,
-    numero varchar(15), 
+    endereco REF tp_endereco_Hospital,
     especializacao varchar(15), 
-    telefone varchar(15),
+    telefone REF VARRAY_tp_telefone,
     FINAL MEMBER FUNCTION retorna_nome_hospital RETURN varchar
 );
 /
@@ -193,7 +217,7 @@ END;
 CREATE OR REPLACE TYPE tp_Contato_de_Emergencia AS OBJECT  ( 
     CPF_PAC varchar(24), 
     nome varchar(256), 
-    telefone varchar(15),
+    telefone REF VARRAY_tp_telefone,
    CONSTRUCTOR FUNCTION tp_Contato_de_Emergencia (objeto tp_Contato_de_Emergencia) RETURN SELF AS RESULT 
 );
 /
