@@ -52,7 +52,7 @@ CREATE TABLE tb_Enfermeiro OF tp_Enfermeiro (
 
 CREATE TABLE tb_Hospital OF tp_Hospital(
     codigo_identificador_hospital PRIMARY KEY,
-    endereco WITH ROWID REFERENCES tb_endereco_hospital
+    endereco SCOPE IS tb_endereco_hospital
 );
 /
 

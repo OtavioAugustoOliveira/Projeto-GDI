@@ -15,7 +15,7 @@ precisei adaptar e criar tabelas próprias para endereço, para que só os filho
 -13. CREATE TABLE OF - ✅
 -14. WITH ROWID REFERENCES - ✅
 -15. REF - ✅
--16. SCOPE IS - 
+-16. SCOPE IS - ✅
 -17. INSERT INTO -✅
 -18. VALUE - 
 -19. VARRAY - ✅ Telefone virou multivalorado, array com no máximo 3 valores.
@@ -35,7 +35,6 @@ CREATE OR REPLACE TYPE tp_endereco AS OBJECT (
 /
 
 CREATE OR REPLACE TYPE tp_endereco_Paciente UNDER tp_endereco (
-
 
 );
 /
@@ -58,7 +57,7 @@ CREATE OR REPLACE TYPE tp_Paciente AS OBJECT (
     sexo varchar(12), 
     data_de_nascimento date ,  
     endereco REF tp_endereco_Paciente,
-    telefone REF VARRAY_tp_telefone,
+    telefone VARRAY_tp_telefone,
     MAP MEMBER FUNCTION retorna_paciente RETURN varchar2
 
 );
@@ -108,7 +107,7 @@ END;
 
 
 ALTER TYPE tp_Funcionario
-    ADD ATTRIBUTE (telefone REF VARRAY_tp_telefone)
+    ADD ATTRIBUTE (telefone VARRAY_tp_telefone)
     CASCADE;
 
 /
@@ -158,7 +157,7 @@ CREATE OR REPLACE TYPE tp_Hospital AS OBJECT  (
     nome varchar(256), 
     endereco REF tp_endereco_Hospital,
     especializacao varchar(15), 
-    telefone REF VARRAY_tp_telefone,
+    telefone VARRAY_tp_telefone,
     FINAL MEMBER FUNCTION retorna_nome_hospital RETURN varchar
 );
 /
@@ -217,7 +216,7 @@ END;
 CREATE OR REPLACE TYPE tp_Contato_de_Emergencia AS OBJECT  ( 
     CPF_PAC varchar(24), 
     nome varchar(256), 
-    telefone REF VARRAY_tp_telefone,
+    telefone VARRAY_tp_telefone,
    CONSTRUCTOR FUNCTION tp_Contato_de_Emergencia (objeto tp_Contato_de_Emergencia) RETURN SELF AS RESULT 
 );
 /
