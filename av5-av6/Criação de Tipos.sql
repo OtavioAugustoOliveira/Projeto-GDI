@@ -40,7 +40,7 @@ CREATE OR REPLACE TYPE tp_endereco_Paciente UNDER tp_endereco (
 /
 
 CREATE OR REPLACE TYPE tp_telefone AS OBJECT (
-    numero varchar(24)
+    numero varchar(15)
 
 );
 /
