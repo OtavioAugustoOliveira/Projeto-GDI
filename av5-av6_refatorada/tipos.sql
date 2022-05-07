@@ -1,12 +1,12 @@
  /* Checklist AV5
 -1. CREATE OR REPLACE TYPE - ✅
--2. CREATE OR REPLACE TYPE BODY - 
--3. MEMBER PROCEDURE - 
--4. MEMBER FUNCTION - 
+-2. CREATE OR REPLACE TYPE BODY - ✅
+-3. MEMBER PROCEDURE - ✅
+-4. MEMBER FUNCTION - dando erro
 -5. ORDER MEMBER FUNCTION - 
 -6. MAP MEMBER FUNCTION -
 -7. CONSTRUCTOR FUNCTION - 
--8. OVERRIDING MEMBER - 
+-8. OVERRIDING MEMBER - ✅
 -9. FINAL MEMBER - 
 -10. NOT INSTANTIABLE TYPE/MEMBER - ✅
 -11. HERANÇA DE TIPOS (UNDER/NOT FINAL) - ✅
@@ -62,10 +62,12 @@ CREATE OR REPLACE TYPE tp_contato_emergencia_nested AS TABLE OF tp_Contato_De_Em
 CREATE OR REPLACE TYPE tp_Funcionario AS OBJECT ( 
     CPF varchar(24), 
     nome varchar(256),  
-    data_de_nascimento date
+    data_de_nascimento date,
+    MEMBER PROCEDURE descrever_funcionario
  
 ) NOT FINAL NOT INSTANTIABLE;
 /
+
 
 ALTER TYPE tp_Funcionario
     ADD ATTRIBUTE (telefone VARRAY_tp_telefone)
@@ -73,10 +75,43 @@ ALTER TYPE tp_Funcionario
 
 /
 
+CREATE OR REPLACE TYPE BODY tp_Funcionario AS
+MEMBER PROCEDURE descrever_funcionario IS
+
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Descrevendo Funcionario:');
+    DBMS_OUTPUT.PUT_LINE('CPF:' || CPF);
+    DBMS_OUTPUT.PUT_LINE('Nome:' || nome);
+
+    END;
+END;
+
+/
+
+
+
 CREATE OR REPLACE TYPE tp_Medico UNDER tp_Funcionario  ( 
-    CRM varchar(24)
+    CRM varchar(24),
+    OVERRIDING MEMBER PROCEDURE descrever_funcionario
 );
 /
+
+
+CREATE OR REPLACE TYPE BODY tp_Medico AS
+OVERRIDING MEMBER PROCEDURE descrever_funcionario IS
+
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Descrevendo Funcionario:');
+    DBMS_OUTPUT.PUT_LINE('CPF:' || CPF);
+    DBMS_OUTPUT.PUT_LINE('Nome:' || nome);
+    DBMS_OUTPUT.PUT_LINE('CRM:' || CRM);
+
+    END;
+END;
+
+/
+
+
 
 CREATE OR REPLACE TYPE tp_Enfermeiro UNDER tp_Funcionario  ( 
     COREN varchar(24)
@@ -99,10 +134,21 @@ CREATE OR REPLACE TYPE tp_Hospital AS OBJECT  (
     codigo_identificador_hospital INTEGER,
     nome varchar(256),
     endereco tp_endereco,
-    especializacao varchar(15), 
-    telefone VARRAY_tp_telefone
+    especializacao varchar(64), 
+    telefone VARRAY_tp_telefone,
+    FINAL MEMBER FUNCTION retorna_incremento_id_hospital RETURN NUMBER
 );
 /
+
+CREATE OR REPLACE TYPE BODY tp_Hospital AS 
+FINAL MEMBER FUNCTION retorna_incremento_id_hospital RETURN NUMBER IS
+    BEGIN
+        RETURN codigo_identificador_hospital + 1;
+    END;
+END;
+/
+
+
 
 CREATE OR REPLACE TYPE tp_Encaminha AS OBJECT (  
     medico REF tp_Medico, 
