@@ -16,12 +16,6 @@ CREATE OR REPLACE TYPE tp_endereco_Hospital UNDER tp_endereco (
 );
 /
 
-
-
-
-
-
-
 CREATE OR REPLACE TYPE tp_telefone AS OBJECT (
     numero varchar(15)
 
@@ -92,7 +86,6 @@ ALTER TYPE tp_Funcionario
     CASCADE;
 
 /
-
 
 
 CREATE OR REPLACE TYPE tp_Medico UNDER tp_Funcionario  ( 

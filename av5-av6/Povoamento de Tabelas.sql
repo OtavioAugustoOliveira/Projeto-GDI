@@ -1,9 +1,23 @@
 ALTER SESSION SET NLS_TIMESTAMP_FORMAT='DD-MON-YY HH24:MI:SS';
 
+INSERT INTO tb_endereco_Paciente Values (tp_endereco_Paciente('52061-070', 'apt 9091'));
+
 INSERT INTO tb_Paciente Values ( 
-    tp_Paciente('01287169500', 'José da Silva','M', TO_DATE('1999-01-01','YYYY-MM-DD'), VARRAY_tp_telefone(tp_telefone('81999724512','81999322214')) );
-)
-/*
+    tp_Paciente('01287169500', 'José da Silva','M', TO_DATE('1999-01-01','YYYY-MM-DD'), (SELECT REF(p) FROM tb_endereco_Paciente p WHERE p.CEP = '52061-070') ,VARRAY_tp_telefone(tp_telefone('81999724512','81999322214')))
+);
+
+
+INSERT INTO tb_Hospital Values (tp_Hospital(codigo_identificador_hospital.Nextval, 'João Hora', '93015211', '', '128', 'pediatria', '81999123092'));
+
+INSERT INTO tb_Hospital Values (tp_Hospital(codigo_identificador_hospital.Nextval, 'São Lucas', '329015888', '', '93', 'cardiologia', '81999443088'));
+
+INSERT INTO tb_Hospital Values (tp_Hospital(codigo_identificador_hospital.Nextval, 'Santa Helena', '449112898', '', '27', 'oncologia', '81999397011'));
+
+INSERT INTO tb_Hospital Values (tp_Hospital(codigo_identificador_hospital.Nextval, 'Augusto Franco', '991815381', '', '59', 'traumatologia', '81999841933'));
+
+INSERT INTO tb_Hospital Values (tp_Hospital(codigo_identificador_hospital.Nextval, 'Oswaldo de Souza', '083115777', '', '88', 'neurologia', '81999110099'));
+
+/*    
 INSERT INTO Paciente Values ('02915139211', 'Maria do Carmo','F', TO_DATE('1980-11-27','YYYY-MM-DD'), '39145550', 'bloco B 402', '81999319518');
 
 INSERT INTO Paciente Values ('56735839072', 'Glorioso da silva','M', TO_DATE('1985-12-07','YYYY-MM-DD'), '55334970', 'Apt 502', '81990319518');
@@ -74,15 +88,6 @@ INSERT INTO Enfermeiro Values ('03891032550', '988.353-PE');
 
 INSERT INTO Enfermeiro Values ('09931145032', '444.392-PE');
 
-INSERT INTO Hospital Values (codigo_identificador_hospital.Nextval, 'João Hora', '93015211', '', '128', 'pediatria', '81999123092');
-
-INSERT INTO Hospital Values (codigo_identificador_hospital.Nextval, 'São Lucas', '329015888', '', '93', 'cardiologia', '81999443088');
-
-INSERT INTO Hospital Values (codigo_identificador_hospital.Nextval, 'Santa Helena', '449112898', '', '27', 'oncologia', '81999397011');
-
-INSERT INTO Hospital Values (codigo_identificador_hospital.Nextval, 'Augusto Franco', '991815381', '', '59', 'traumatologia', '81999841933');
-
-INSERT INTO Hospital Values (codigo_identificador_hospital.Nextval, 'Oswaldo de Souza', '083115777', '', '88', 'neurologia', '81999110099');
 
 INSERT INTO Atendimento Values ('01287169500', '33819155083', TO_TIMESTAMP('2022/03/31 08:14:03','YYYY/MM/DD HH24:MI:SS,'), 'Paciente com febre, pressão 12x8', 'Insira anamnese aqui');
 
