@@ -1,31 +1,3 @@
-/* 
--1. CREATE OR REPLACE TYPE - ✅
--2. CREATE OR REPLACE TYPE BODY - ✅
--3. MEMBER PROCEDURE - ✅
--4. MEMBER FUNCTION - ✅
--5. ORDER MEMBER FUNCTION - ✅
--6. MAP MEMBER FUNCTION - ✅
--7. CONSTRUCTOR FUNCTION - ✅
--8. OVERRIDING MEMBER - ✅
--9. FINAL MEMBER - ✅
--10. NOT INSTANTIABLE TYPE/MEMBER - ✅ 
-precisei adaptar e criar tabelas próprias para endereço, para que só os filhos possam ser acessados
--11. HERANÇA DE TIPOS (UNDER/NOT FINAL) - ✅
--12. ALTER TYPE - ✅
--13. CREATE TABLE OF - ✅
--14. WITH ROWID REFERENCES - ✅
--15. REF - ✅
--16. SCOPE IS - ✅
--17. INSERT INTO -✅
--18. VALUE - 
--19. VARRAY - ✅ Telefone virou array com no máximo 3 valores.
--20. NESTED TABLE
-
-
-
-
- */
-
 
 CREATE OR REPLACE TYPE tp_endereco AS OBJECT (
     cep varchar(24),
@@ -38,6 +10,17 @@ CREATE OR REPLACE TYPE tp_endereco_Paciente UNDER tp_endereco (
 
 );
 /
+
+CREATE OR REPLACE TYPE tp_endereco_Hospital UNDER tp_endereco (
+    numero varchar(15)
+);
+/
+
+
+
+
+
+
 
 CREATE OR REPLACE TYPE tp_telefone AS OBJECT (
     numero varchar(15)
@@ -144,30 +127,37 @@ CREATE OR REPLACE TYPE tp_Enfermeiro UNDER tp_Funcionario  (
 /
 
 
-CREATE OR REPLACE TYPE tp_endereco_Hospital UNDER tp_endereco (
-    numero varchar(15)
+CREATE OR REPLACE TYPE tp_nome_hospital AS OBJECT(
+    nome varchar(256)
+
 );
 /
 
+CREATE OR REPLACE TYPE tp_tb_nome_hospital AS TABLE OF tp_nome_hospital;
+/
 
 CREATE OR REPLACE TYPE tp_Hospital AS OBJECT  ( 
-    codigo_identificador_hospital varchar(240), 
-    nome varchar(256), 
+    codigo_identificador_hospital varchar(240),
+    nome tp_tb_nome_hospital,
     endereco REF tp_endereco_Hospital,
     especializacao varchar(15), 
     telefone VARRAY_tp_telefone,
-    FINAL MEMBER FUNCTION retorna_nome_hospital RETURN varchar
+    FINAL MEMBER FUNCTION retorna_especializacao_hospital RETURN varchar
 );
 /
 
+
 CREATE OR REPLACE TYPE BODY tp_Hospital AS 
 
-FINAL MEMBER FUNCTION retorna_nome_hospital RETURN varchar IS
+FINAL MEMBER FUNCTION retorna_especializacao_hospital RETURN varchar IS
     BEGIN
-        RETURN nome;
+        RETURN especializacao;
     END;
 END;
 /
+
+
+
 
 CREATE OR REPLACE TYPE tp_Atendimento AS OBJECT ( 
     paciente varchar(256), 

@@ -53,7 +53,7 @@ CREATE TABLE tb_Enfermeiro OF tp_Enfermeiro (
 CREATE TABLE tb_Hospital OF tp_Hospital(
     codigo_identificador_hospital PRIMARY KEY,
     endereco SCOPE IS tb_endereco_hospital
-);
+) NESTED TABLE nome STORE AS nomes_hospital;
 /
 
 
