@@ -31,7 +31,7 @@ CREATE OR REPLACE TYPE tp_Paciente AS OBJECT (
     nome varchar(256), 
     sexo varchar(12), 
     data_de_nascimento date ,  
-    endereco REF tp_endereco_Paciente,
+    endereco tp_endereco_Paciente,
     telefone VARRAY_tp_telefone,
     MAP MEMBER FUNCTION retorna_paciente RETURN varchar2
 
@@ -60,7 +60,6 @@ CREATE OR REPLACE TYPE tp_Funcionario AS OBJECT (
     nome varchar(256), 
     funcao varchar(30), 
     data_de_nascimento date,
-    telefone VARRAY_tp_telefone,
     MEMBER PROCEDURE descrever_funcionario
  
 ) NOT FINAL;
@@ -132,7 +131,7 @@ CREATE OR REPLACE TYPE tp_tb_nome_hospital AS TABLE OF tp_nome_hospital;
 CREATE OR REPLACE TYPE tp_Hospital AS OBJECT  ( 
     codigo_identificador_hospital varchar(240),
     nome tp_tb_nome_hospital,
-    endereco REF tp_endereco_Hospital,
+    endereco tp_endereco_Hospital,
     especializacao varchar(15), 
     telefone VARRAY_tp_telefone,
     FINAL MEMBER FUNCTION retorna_especializacao_hospital RETURN varchar
