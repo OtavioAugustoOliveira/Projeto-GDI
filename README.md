@@ -15,9 +15,9 @@ precisei adaptar e criar tabelas próprias para endereço, para que só os filho
 -11. HERANÇA DE TIPOS (UNDER/NOT FINAL) - ✅
 -12. ALTER TYPE - ✅
 -13. CREATE TABLE OF - ✅
--14. WITH ROWID REFERENCES - ✅
+-14. WITH ROWID REFERENCES - 
 -15. REF - ✅
--16. SCOPE IS - ✅
+-16. SCOPE IS - 
 -17. INSERT INTO -✅
 -18. VALUE - 
 -19. VARRAY - ✅ Telefone virou array com no máximo 3 valores.

@@ -60,7 +60,7 @@ CREATE OR REPLACE TYPE tp_Funcionario AS OBJECT (
     nome varchar(256), 
     funcao varchar(30), 
     data_de_nascimento date,
-    
+    telefone VARRAY_tp_telefone,
     MEMBER PROCEDURE descrever_funcionario
  
 ) NOT FINAL;
