@@ -34,3 +34,7 @@ CREATE TABLE tb_Encaminha OF tp_Encaminha(
 
 );
 /
+
+CREATE SEQUENCE codigo_identificador_emergencia INCREMENT BY 1 START WITH 1;
+
+CREATE SEQUENCE codigo_identificador_hospital INCREMENT BY 1 START WITH 1

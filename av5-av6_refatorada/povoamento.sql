@@ -1,3 +1,7 @@
+ALTER SESSION SET NLS_TIMESTAMP_FORMAT='DD-MON-YY HH24:MI';
+
+
+
 INSERT INTO tb_Enfermeiro VALUES (
             tp_Enfermeiro(
                 '81287138511',
@@ -33,14 +37,14 @@ INSERT INTO tb_Medico VALUES (
 );
 
 
-INSERT INTO tb_Hospital VALUES (
-            tp_hospital(
-                '81287144933',
-                'João Marciel',  
-                TO_DATE('2001-09-23','YYYY-MM-DD'),
-                VARRAY_TP_telefone(tp_telefone('81944334444'), tp_telefone('81999544511')),
-                '99953929-0/BR'
-            )
+INSERT INTO tb_Hospital Values (
+            tp_Hospital(
+                codigo_identificador_hospital.Nextval,
+                'João Silva', 
+                tp_endereco('58012345','Apartamento', '75'),
+                'Cardiologia',
+                VARRAY_TP_telefone(tp_telefone('81944335555'), tp_telefone('81999522933'))
+                )
 
 );
 
