@@ -103,8 +103,8 @@ CREATE TABLE tb_Especializacao OF tp_Especializacao (
     especializacao NOT NULL,
     PRIMARY KEY (funcionario,especializacao), 
     funcionario REFERENCES tb_Funcionario NOT NULL
-    
-);
+
+) ;
 /
 
 CREATE SEQUENCE codigo_identificador_emergencia INCREMENT BY 1 START WITH 1;

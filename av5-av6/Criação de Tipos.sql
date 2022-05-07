@@ -18,7 +18,7 @@ precisei adaptar e criar tabelas próprias para endereço, para que só os filho
 -16. SCOPE IS - ✅
 -17. INSERT INTO -✅
 -18. VALUE - 
--19. VARRAY - ✅ Telefone virou multivalorado, array com no máximo 3 valores.
+-19. VARRAY - ✅ Telefone virou array com no máximo 3 valores.
 -20. NESTED TABLE
 
 
@@ -47,8 +47,6 @@ CREATE OR REPLACE TYPE tp_telefone AS OBJECT (
 
 CREATE OR REPLACE TYPE VARRAY_tp_telefone AS VARRAY(3) OF tp_telefone;
 /
-
-
 
 
 CREATE OR REPLACE TYPE tp_Paciente AS OBJECT ( 
