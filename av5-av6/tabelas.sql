@@ -35,6 +35,12 @@ CREATE TABLE tb_Encaminha OF tp_Encaminha(
 );
 /
 
+CREATE TABLE tb_Examina of tp_Examina(
+    medico SCOPE IS tb_medico NOT NULL,
+    paciente SCOPE IS tb_paciente NOT NULL
+);
+/
+
 CREATE SEQUENCE codigo_identificador_emergencia INCREMENT BY 1 START WITH 1;
 
-CREATE SEQUENCE codigo_identificador_hospital INCREMENT BY 1 START WITH 1
+CREATE SEQUENCE codigo_identificador_hospital INCREMENT BY 1 START WITH 1;

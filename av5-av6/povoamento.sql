@@ -212,7 +212,7 @@ INSERT INTO tb_Hospital Values (
 );
 
 
-INSERT INTO tb_Paciente Values( 
+INSERT INTO tb_Paciente VALUES ( 
     tp_Paciente(
         '01287169500', 
         'José da Silva',
@@ -263,7 +263,7 @@ INSERT INTO tb_Paciente VALUES (
         'Junior capixaba',
         'M',
         TO_DATE('2000-01-21','YYYY-MM-DD'),
-        tp_endereco('55334970', 'Predio jose bonifacio'),
+        tp_endereco('55334970', 'Predio jose bonifacio', '23'),
         VARRAY_TP_telefone(tp_telefone('81912319518')),
         tp_contato_emergencia_nested(tp_Contato_De_Emergencia(
             'Junior capixaba',  
@@ -323,7 +323,7 @@ INSERT INTO tb_Paciente VALUES (
         'Robervalda santos',
         'F',
         TO_DATE('1980-04-05','YYYY-MM-DD'),
-        tp_endereco('59135160', 'bloco B 402', '21')
+        tp_endereco('59135160', 'bloco B 402', '21'),
         VARRAY_TP_telefone(tp_telefone('25119319518')),
          tp_contato_emergencia_nested(tp_Contato_De_Emergencia(
             'Glória maria',  
@@ -338,7 +338,7 @@ INSERT INTO tb_Paciente VALUES (
         'Glória maria',
         'F',
         TO_DATE('1990-09-03','YYYY-MM-DD'),
-        ('19145559', 'Apt 1023', '12'),
+        tp_endereco('19145559', 'Apt 1023', '12'),
         VARRAY_TP_telefone(tp_telefone('81919319522')),
          tp_contato_emergencia_nested(tp_Contato_De_Emergencia(
             'Benedito josé',  
@@ -353,7 +353,7 @@ INSERT INTO tb_Paciente VALUES (
         'Benedito josé',
         'M',
         TO_DATE('2005-01-01','YYYY-MM-DD'),
-        tp_endereco('23145550', 'Apt 402', '124')
+        tp_endereco('23145550', 'Apt 402', '124'),
         VARRAY_TP_telefone(tp_telefone('81899319110')),
          tp_contato_emergencia_nested(tp_Contato_De_Emergencia(
             'Marcos josé',  
@@ -364,7 +364,6 @@ INSERT INTO tb_Paciente VALUES (
 
 INSERT INTO tb_Encaminha VALUES (
     tp_Encaminha(
-        
         (SELECT REF(C) FROM tb_Medico C WHERE C.cpf = '81287144933'),
         (SELECT REF(Cr) FROM tb_Paciente Cr WHERE Cr.cpf = '01287169500'),
         (SELECT REF(G) FROM tb_Hospital G WHERE G.codigo_identificador_hospital = 1 ),
@@ -372,4 +371,98 @@ INSERT INTO tb_Encaminha VALUES (
     )
 );
 
+INSERT INTO tb_Encaminha VALUES (
+    tp_Encaminha(
+        (SELECT REF(C) FROM tb_Medico C WHERE C.cpf = '85735856275'),
+        (SELECT REF(Cr) FROM tb_Paciente Cr WHERE Cr.cpf = '39040842086'),
+        (SELECT REF(G) FROM tb_Hospital G WHERE G.codigo_identificador_hospital = 4 ),
+        (TO_DATE('2022-01-29 10:00:00', 'yyyy-mm-dd hh24:mi:ss'))
+    )
+);
+
+INSERT INTO tb_Encaminha VALUES (
+    tp_Encaminha(
+        (SELECT REF(C) FROM tb_Medico C WHERE C.cpf = '01327454211'),
+        (SELECT REF(Cr) FROM tb_Paciente Cr WHERE Cr.cpf = '47449186039'),
+        (SELECT REF(G) FROM tb_Hospital G WHERE G.codigo_identificador_hospital = 5 ),
+        (TO_DATE('2022-02-10 10:00:00', 'yyyy-mm-dd hh24:mi:ss'))
+    )
+);
+
+INSERT INTO tb_Encaminha VALUES (
+    tp_Encaminha(
+        (SELECT REF(C) FROM tb_Medico C WHERE C.cpf = '81287144933'),
+        (SELECT REF(Cr) FROM tb_Paciente Cr WHERE Cr.cpf = '02915139211'),
+        (SELECT REF(G) FROM tb_Hospital G WHERE G.codigo_identificador_hospital = 1 ),
+        (TO_DATE('2021-07-20 10:00:00', 'yyyy-mm-dd hh24:mi:ss'))
+    )
+);
+
+INSERT INTO tb_Encaminha VALUES (
+    tp_Encaminha(
+        (SELECT REF(C) FROM tb_Medico C WHERE C.cpf = '12335856321'),
+        (SELECT REF(Cr) FROM tb_Paciente Cr WHERE Cr.cpf = '47449186039'),
+        (SELECT REF(G) FROM tb_Hospital G WHERE G.codigo_identificador_hospital = 2 ),
+        (TO_DATE('2022-06-28 10:00:00', 'yyyy-mm-dd hh24:mi:ss'))
+    )
+);
+
+INSERT INTO tb_Encaminha VALUES (
+    tp_Encaminha(
+        (SELECT REF(C) FROM tb_Medico C WHERE C.cpf = '81726319815'),
+        (SELECT REF(Cr) FROM tb_Paciente Cr WHERE Cr.cpf = '33431694047'),
+        (SELECT REF(G) FROM tb_Hospital G WHERE G.codigo_identificador_hospital = 3 ),
+        (TO_DATE('2022-06-28 10:00:00', 'yyyy-mm-dd hh24:mi:ss'))
+    )
+);
+
+INSERT INTO tb_Examina VALUES (
+    tp_Examina(
+        (SELECT REF(C) FROM tb_Medico C WHERE C.cpf = '81726319815'),
+        (SELECT REF(Cr) FROM tb_Paciente Cr WHERE Cr.cpf = '33431694047'),
+        NULL,
+        NULL
+    )
+);
+
+INSERT INTO tb_Examina VALUES (
+    tp_Examina(
+        (SELECT REF(C) FROM tb_Medico C WHERE C.cpf = '12335856321'),
+        (SELECT REF(Cr) FROM tb_Paciente Cr WHERE Cr.cpf = '33431694047'),
+        NULL,
+        NULL
+    )
+);
+
+INSERT INTO tb_Examina VALUES (
+    tp_Examina(
+        (SELECT REF(C) FROM tb_Medico C WHERE C.cpf = '81726319815'),
+        (SELECT REF(Cr) FROM tb_Paciente Cr WHERE Cr.cpf = '02915139211'),
+        NULL,
+        NULL
+    )
+);
+
+INSERT INTO tb_Examina VALUES (
+    tp_Examina(
+        (SELECT REF(C) FROM tb_Medico C WHERE C.cpf = '81726319815'),
+        (SELECT REF(Cr) FROM tb_Paciente Cr WHERE Cr.cpf = '33431694047'),
+        NULL,
+        NULL
+    )
+);
+
 SELECT data_e_hora ,DEREF(PC.medico).nome, (PC.paciente).nome, (PC.hospital).nome FROM tb_Encaminha PC;
+/
+SELECT data_e_hora ,DEREF(PC.medico).nome, (PC.paciente).nome FROM tb_Examina PC;
+/
+/* Testando 1 caso: Value*/
+
+
+DECLARE
+    medico tp_Medico;
+BEGIN
+SELECT VALUE(C) INTO medico FROM tb_Medico C WHERE C.cpf = '81287144933';
+medico.descrever_funcionario();
+END;
+/
