@@ -25,4 +25,42 @@ or (D.ENDERECO).complemento like 'Predio%';/
 /* retorna a quantidade de homens e mulheres na tabela de pacientes */
 SELECT COUNT(*),sexo from tb_Paciente group by sexo;/
 
-/* */
+/* retorna cpf e coren dos enfermeiros */
+SELECT NOME, COREN FROM tb_Enfermeiro;/
+
+/* retorna a quantidade e o nome dos médicos que examinaram alguém */
+SELECT count(*), DEREF(D.medico).nome FROM tb_Examina D group by DEREF(D.medico).nome;/
+
+/* Retorna nome do paciente, numero do paciente, nome do seu contato de emergencia e numero do contato de emergencia
+OBS: CONSULTA DE VARRAY DENTRO DE NESTED TABLE*/
+SELECT P.nome as paciente, H.numero as numero_paciente, C.nome as nome_contato_emergencia, T.numero as numero_contato_emergencia 
+FROM tb_Paciente P , TABLE(P.contatos_vinculados) C, TABLE(C.telefone) T, TABLE(P.telefone) H;/
+
+/* retorna nome do paciente, numero do paciente, nome do contato de emergencia e numero do contato de emergencia
+de pacientes cujo contato de emergencia é compartilhado com outras pessoas
+OBS: CONSULTA DE VARRAY DENTRO DE NESTED TABLE*/
+
+
+SELECT P.nome as paciente, H.numero as numero_paciente, C.nome as nome_contato_emergencia, T.numero as numero_contato_emergencia 
+FROM tb_Paciente P , TABLE(P.contatos_vinculados) C, TABLE(C.telefone) T, TABLE(P.telefone) H 
+WHERE T.numero in (
+
+SELECT numero_contato_emergencia FROM (SELECT count(*) as quantidade_repeticoes, T.numero as numero_contato_emergencia
+FROM tb_Paciente P , TABLE(P.contatos_vinculados) C, TABLE(C.telefone) T, TABLE(P.telefone) H 
+GROUP BY T.numero)
+WHERE quantidade_repeticoes > 1
+
+);/
+
+/* retorna nome do medico, do paciente, diagnostico e data dos exames,
+ da ordem do mais antigo para o mais atual */
+SELECT DEREF(E.medico).nome, DEREF(E.paciente).nome, diagnostico, data_e_hora FROM tb_Examina E order by data_e_hora;/
+
+/* Retorna informações sobre funcionário cujo cpf é '81287144933'*/
+DECLARE
+    medico tp_Medico;
+BEGIN
+SELECT VALUE(C) INTO medico FROM tb_Medico C WHERE C.cpf = '81287144933';
+medico.descrever_funcionario();
+END;
+/

@@ -266,8 +266,8 @@ INSERT INTO tb_Paciente VALUES (
         tp_endereco('55334970', 'Predio jose bonifacio', '23'),
         VARRAY_TP_telefone(tp_telefone('81912319518')),
         tp_contato_emergencia_nested(tp_Contato_De_Emergencia(
-            'Junior capixaba',  
-            VARRAY_TP_telefone(tp_telefone('81912319518'))
+            'Marilene tainha',  
+            VARRAY_TP_telefone(tp_telefone('81199419568'))
         ))
     )
 );
@@ -326,8 +326,8 @@ INSERT INTO tb_Paciente VALUES (
         tp_endereco('59135160', 'bloco B 402', '21'),
         VARRAY_TP_telefone(tp_telefone('25119319518')),
          tp_contato_emergencia_nested(tp_Contato_De_Emergencia(
-            'Glória maria',  
-            VARRAY_TP_telefone(tp_telefone('81919319522'))
+            'Welker marcal',  
+            VARRAY_TP_telefone(tp_telefone('8199931991'))
         ))
     )
 );
@@ -421,7 +421,7 @@ INSERT INTO tb_Examina VALUES (
         (SELECT REF(C) FROM tb_Medico C WHERE C.cpf = '81726319815'),
         (SELECT REF(Cr) FROM tb_Paciente Cr WHERE Cr.cpf = '33431694047'),
         NULL,
-        NULL
+        (TO_DATE('2022-02-09 18:00:00', 'yyyy-mm-dd hh24:mi:ss'))
     )
 );
 
@@ -430,7 +430,7 @@ INSERT INTO tb_Examina VALUES (
         (SELECT REF(C) FROM tb_Medico C WHERE C.cpf = '12335856321'),
         (SELECT REF(Cr) FROM tb_Paciente Cr WHERE Cr.cpf = '33431694047'),
         NULL,
-        NULL
+        (TO_DATE('2022-01-03 14:55:00', 'yyyy-mm-dd hh24:mi:ss'))
     )
 );
 
@@ -439,7 +439,7 @@ INSERT INTO tb_Examina VALUES (
         (SELECT REF(C) FROM tb_Medico C WHERE C.cpf = '81726319815'),
         (SELECT REF(Cr) FROM tb_Paciente Cr WHERE Cr.cpf = '02915139211'),
         NULL,
-        NULL
+        (TO_DATE('2021-02-14 09:00:00', 'yyyy-mm-dd hh24:mi:ss'))
     )
 );
 
@@ -448,7 +448,7 @@ INSERT INTO tb_Examina VALUES (
         (SELECT REF(C) FROM tb_Medico C WHERE C.cpf = '81726319815'),
         (SELECT REF(Cr) FROM tb_Paciente Cr WHERE Cr.cpf = '33431694047'),
         NULL,
-        NULL
+        (TO_DATE('2022-06-28 10:00:00', 'yyyy-mm-dd hh24:mi:ss'))
     )
 );
 
