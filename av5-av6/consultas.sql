@@ -79,6 +79,21 @@ END;
 SELECT P.nome as paciente, H.numero as numero_paciente
 FROM tb_Paciente P , TABLE(P.telefone) H 
 WHERE H.numero LIKE '81%';
+/
+
+/* Função que retorna quais são os medicos possuem mais de 1 telefone*/
+
+DECLARE
+    telefone VARRAY_tp_telefone;
+BEGIN
+    FOR valor IN ( SELECT M.telefone, M.nome FROM tb_Medico M )  
+    LOOP
+        IF valor.telefone.COUNT > 1 THEN
+            DBMS_OUTPUT.PUT_LINE(valor.nome || '     Esse Médico possui mais de 1 telefone');  
+        END IF;
+    END LOOP;
+END;
+/
 
 
-/* */
+

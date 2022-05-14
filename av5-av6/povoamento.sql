@@ -234,7 +234,7 @@ INSERT INTO tb_Paciente VALUES (
         'F',
         TO_DATE('1980-11-27','YYYY-MM-DD'),
         tp_endereco('39145550','bloco B', '402'),
-        VARRAY_TP_telefone(tp_telefone('81999319518')),
+        VARRAY_TP_telefone(tp_telefone('81944138529')),
         tp_contato_emergencia_nested(tp_Contato_De_Emergencia(
             'José da Silva',  
             VARRAY_TP_telefone(tp_telefone('81938284411'))
@@ -249,7 +249,7 @@ INSERT INTO tb_Paciente VALUES (
         'M',
         TO_DATE('1985-12-07','YYYY-MM-DD'),
         tp_endereco('55334970', 'Apt 502', '81990319518'),
-        VARRAY_TP_telefone(tp_telefone('81999319518')),
+        VARRAY_TP_telefone(tp_telefone('81999312222')),
         tp_contato_emergencia_nested(tp_Contato_De_Emergencia(
             'Junior capixaba',  
             VARRAY_TP_telefone(tp_telefone('81912319518'))
@@ -279,7 +279,7 @@ INSERT INTO tb_Paciente VALUES (
         'M',
         TO_DATE('1987-03-12','YYYY-MM-DD'),
         tp_endereco('55331234', 'Predio', '140'),
-        VARRAY_TP_telefone(tp_telefone('81912319518')),
+        VARRAY_TP_telefone(tp_telefone('81944419518')),
         tp_contato_emergencia_nested(tp_Contato_De_Emergencia(
             'Marilene tainha',  
             VARRAY_TP_telefone(tp_telefone('81199419568'))
@@ -297,7 +297,7 @@ INSERT INTO tb_Paciente VALUES (
         VARRAY_TP_telefone(tp_telefone('81199419568')),
         tp_contato_emergencia_nested(tp_Contato_De_Emergencia(
             'Welker marcal',  
-            VARRAY_TP_telefone(tp_telefone('81999319919'))
+            VARRAY_TP_telefone((tp_telefone('8199931991')))
         ))
     )
 );
@@ -309,7 +309,7 @@ INSERT INTO tb_Paciente VALUES (
         'M',
         TO_DATE('2001-11-16','YYYY-MM-DD'),
         tp_endereco('79145550', 'bloco A 203', '42'),
-        VARRAY_TP_telefone(tp_telefone('81999319919')),
+        VARRAY_TP_telefone(tp_telefone('8199931991')),
         tp_contato_emergencia_nested(tp_Contato_De_Emergencia(
             'Robervalda santos',  
             VARRAY_TP_telefone(tp_telefone('25119319518'))
